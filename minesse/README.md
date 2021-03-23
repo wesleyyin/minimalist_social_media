@@ -74,3 +74,6 @@ salted pass:
 https://stackoverflow.com/questions/43092071/how-should-i-store-salts-and-passwords-in-mongodb/43094720
 
 General app structure: followed tutorial: https://www.youtube.com/watch?v=7CqJlxBYj-M
+
+Uploading Images:
+https://medium.com/@nitinpatel_20236/image-upload-via-nodejs-server-3fe7d3faa642

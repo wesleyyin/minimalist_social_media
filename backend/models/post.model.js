@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const postSchema = new Schema({
     username: {type: String, required: true},
     caption: {type: String, required: true},
-    date: {type: Date, required: true}
+    hasPhoto: {type: Boolean, default: true, required: true}
 },{
     timestamps: true,
 });
