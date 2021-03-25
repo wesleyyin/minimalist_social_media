@@ -13,38 +13,43 @@ router.route('/').get((req,res) =>{
 //TODO add function that pushes the post ID to the user arrays
 //require connections and users for operation^
 router.route('/add').post((req,res) =>{
-    const username = req.body.username;
+    const user = req.body.user;
     const caption = req.body.caption;
     const hasPhoto = Boolean(req.body.hasPhoto);
-    const id = mongoose.Types.ObjectId();
+
     const newPost = new Post({
-        username,
-        caption,
-        hasPhoto
+        user: user,
+        caption: caption,
+        hasPhoto: hasPhoto
 
     });
     newPost.save()
         .then(function(post){
-            helper(post);
-            res.json("post added!");
+            helper(post,function(err,ret){
+                if(err){
+                    res.status(400).json('Error: ' + err);
+                }res.json("post added!");
+            });
+            
         }
         )
         .catch(err => res.status(400).json('Error: ' + err));
 });
-function helper(post){
+//TODO: implement callbacks for this
+function helper(post,cb){
 
-    Connection.find({ userA: post.username , status :'connected'})
-        .then(connections =>helperA(connections, post))
-        .catch(err => res.status(400).json('Error: ' + err));
-    Connection.find({ userB: post.username , status :'connected'})
-        .then(connections =>helperB(connections, post))
-        .catch(err => res.status(400).json('Error: ' + err));
+    Connection.find({ userA: post.user , status :'connected'})
+        .then(connections =>helperA(connections, post,cb))
+        .catch(err => cb(err));
+    Connection.find({ userB: post.user , status :'connected'})
+        .then(connections =>helperB(connections, post,cb))
+        .catch(err => cb(err));
 
 }
-function helperA(connections,post){
+function helperA(connections,post,cb){
 
     connections.forEach(function(connection){
-        User.findOne({username : connection.userB})
+        User.findById(connection.userB)
         .then(user=> {
             
             console.log(user.username);
@@ -52,21 +57,21 @@ function helperA(connections,post){
             user.save();
             
             
-        }).catch(err => console.log(err));
-    });
+        }).catch(err => cb(err));
+    });cb(null,"post added");
 
 }
-function helperB(connections,post){
+function helperB(connections,post,cb){
 
     connections.forEach(function(connection){
-        User.findOne({username : connection.userA})
+        User.findById(connection.userA)
         .then(user=> {
             console.log(user.username);
             user.posts.push(post._id);
             user.save();
             
-        }).catch(err => console.log(err));
-    });
+        }).catch(err => cb(err));
+    });cb(null,"post added");
 
 }
 
@@ -86,7 +91,7 @@ router.route('/:id').delete((req,res) =>{
 router.route('/update/:id').post((req,res) =>{
     Post.findById(req.params.id)
         .then(post => {
-            post.username = req.body.username;
+            post.user = req.body.user;
             post.caption = req.body.caption;
             post.hasPhoto = Boolean(req.body.hasPhoto);
             post.save()

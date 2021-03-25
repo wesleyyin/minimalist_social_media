@@ -23,13 +23,15 @@ const postsRouter = require('./routes/posts');
 const notificationsRouter = require('./routes/notifications');
 const connectionsRouter = require('./routes/connections');
 const usersRouter = require('./routes/users');
+const commentsRouter = require('./routes/comments');
 const imagesRouter = require('./routes/images');
 
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 app.use('/notifications', notificationsRouter);
 app.use('/connections', connectionsRouter);
-app.use('/images', imagesRouter)
+app.use('/comments', commentsRouter)
+app.use('/images', imagesRouter);
 
 app.listen(port, ()=>{
     console.log(`Server is running out of port: ${port}`);

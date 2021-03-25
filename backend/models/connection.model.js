@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 //picture will be stored in FS with post ID as name
 const connectionSchema = new Schema({
-    userA: {type: String, required: true},
-    userB: {type: String, required: true},
+    userA: { type: Schema.Types.ObjectId, ref: 'User' },
+    userB: { type: Schema.Types.ObjectId, ref: 'User' },
     status: {
         type: String,
         enum : ['pending','connected'],
