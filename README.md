@@ -20,6 +20,16 @@ https://stackoverflow.com/questions/15772394/how-to-upload-display-and-save-imag
 
 ^I am still looking into renaming the image to match the post id, so the client can access the img given a reference to the post
 
+change of plans, the stored image id should be the post object id+the original file name, to maintain the extension
+
+//ok I'm still tweaking on this, maybe just implement more of the project first so I can properly tinker with this
+
 ^look into sending the desired name as a feild in the req
 
 Retrieve img on client directly from fs location given post info(id)
+
+Better way to do this through react:
+https://medium.com/@mahesh_joshi/reactjs-nodejs-upload-image-how-to-upload-image-using-reactjs-and-nodejs-multer-918dc66d304c
+
+references to other objects: good for post and notification arrays in User
+https://stackoverflow.com/questions/22244421/how-to-create-mongoose-schema-with-array-of-object-ids

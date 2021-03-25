@@ -5,18 +5,31 @@ const upload = multer({dest: '../image_uploads'});
 const fs = require('fs')
 
 router.post('/upload', upload.single('photo'), (req, res) => {
-    if(req.file) {
-        res.json(req.file);
+    const tempPath = req.file.path;
+    //kinda sketch move here, renaming path the post object id for direct fs access in the future
+    const targetPath = path.join(__dirname, "../image_uploads/"+req.body.id+".png");
+
+    if (path.extname(req.file.originalname).toLowerCase() === ".png") {
+      fs.rename(tempPath, targetPath, err => {
+        if (err) return handleError(err, res);
+
+        res
+          .status(200)
+          .contentType("text/plain")
+          .end("File uploaded!");
+      });
+    } else {
+      fs.unlink(tempPath, err => {
+        if (err) return handleError(err, res);
+
+        res
+          .status(403)
+          .contentType("text/plain")
+          .end("Only .png files are allowed!");
+      });
     }
-    else throw 'error';
 });
 //for getting the image, you can access the image by its source directly from html
 
-router.route('/:id').delete((req,res) =>{
-    const path = '../image_uploads/';
-    Exercise.findByIdAndDelete(req.params.id)
-        .then(() => res.json('Exercise deleted.'))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
 
 module.exports = router;

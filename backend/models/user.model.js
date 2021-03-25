@@ -1,3 +1,4 @@
+const { ObjectID } = require('bson');
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -6,9 +7,9 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    posts: [{type: String, required: true}],//post ID array
-    notifications: [{type: String, required: true}],//notification ID array
-    bio: {type: Date, required: false}
+    posts: [{type: ObjectID, ref: 'Post'}],//post ID array
+    notifications: [{type: ObjectID, ref: 'Notification'}],//notification ID array
+    bio: {type: String, required: false}
 },{
     timestamps: true,
 });

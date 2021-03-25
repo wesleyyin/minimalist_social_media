@@ -9,6 +9,14 @@ router.route('/').get((req,res) =>{
 
 });
 
+router.route('/:id').get((req,res) =>{
+    User.findById(req.params.id)
+        .populate('posts')
+        .populate('notifications')
+        .then(post => res.json(post))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 router.route('/login').post((req,res) =>{
     User.findOne({name : req.body.username}, function (err, exists){
         if (!exists.length){
@@ -24,26 +32,31 @@ router.route('/login').post((req,res) =>{
     });
 
 });
-//updating bio and username
-router.route('/update').post((req,res) =>{
+//updating bio
+router.route('/updatebio').post((req,res) =>{
     User.findOne({name : req.body.username}, function (err, exists){
         if (!exists.length){
             res.json({msg: 'User DNE'});
         }else{
-            
-
+            exists.bio = req.body.bio;
+            exists.save()
+                .then(() => res.json('Bio updated!'))
+                .catch(err => res.status(400).json('Error: ' + err));
         }
     });
-
 });
+
+
+
 //check if username exists before doing anything
 router.route('/register').post((req,res) =>{
+    console.log("in register");
     User.find({name : req.body.username}, function (err, exists){
         if (exists.length){
             res.json('Username already exists')
         }else{
             const username = req.body.username;
-            const password = Bcrypt.hashSync(req.body.password, 10);
+            const password = bcrypt.hashSync(req.body.password, 10);
             const posts = [];
             const notifications = [];
             const bio = req.body.bio;
@@ -59,7 +72,7 @@ router.route('/register').post((req,res) =>{
                 .then(users => res.json('User added!'))
                 .catch(err => res.status(400).json('Error: ' + err));
             }
-    });
+    }).catch(err => res.status(400).json('Error: ' + err));
 });
 
 module.exports = router;
