@@ -1,33 +1,46 @@
 const router = require('express').Router();
 const express = require('express');
+const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
-const upload = multer({dest: '../image_uploads'});
-const fs = require('fs')
+const fs = require('fs');
 
-router.post('/upload', upload.single('photo'), (req, res) => {
-    const tempPath = req.file.path;
-    //kinda sketch move here, renaming path the post object id for direct fs access in the future
-    const targetPath = path.join(__dirname, "../image_uploads/"+req.body.id+".png");
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+      cb(null, '../images_uploads');
+  },
+  filename: function(req, file, cb) {   
+      cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  if(allowedFileTypes.includes(file.mimetype)) {
+    req.isAdded = true;
+      cb(null, true);
+  } else {
+      req.isAdded = false;
+      cb(null, false);
+  }
+}
+let upload = multer({ storage, fileFilter });
 
-    if (path.extname(req.file.originalname).toLowerCase() === ".png") {
-      fs.rename(tempPath, targetPath, err => {
-        if (err) return handleError(err, res);
-
-        res
-          .status(200)
-          .contentType("text/plain")
-          .end("File uploaded!");
-      });
-    } else {
-      fs.unlink(tempPath, err => {
-        if (err) return handleError(err, res);
-
-        res
-          .status(403)
-          .contentType("text/plain")
-          .end("Only .png files are allowed!");
-      });
+router.route('/add').post(upload.single('photo'), (req, res) => {
+    const name = req.body.name;
+    const birthdate = req.body.birthdate;
+    const fileName = req.file.filename;
+    if(isAdded){
+      res.json({uploaded:true, fileName: fileName});
+    }else{
+      res.json({uploaded:false});
     }
+    
+});
+router.route('/delete').post((req, res) => {
+  const fileName = req.body.fileName;
+  const filePath = '../image_uploads/'+fileName; 
+  fs.unlinkSync(filePath);
+  res.json("Image Removed");
+  
 });
 //for getting the image, you can access the image by its source directly from html
 

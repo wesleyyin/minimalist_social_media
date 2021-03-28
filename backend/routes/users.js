@@ -9,6 +9,7 @@ router.route('/').get((req,res) =>{
 
 });
 
+
 router.route('/:id').get((req,res) =>{
     User.findById(req.params.id)
         .populate('posts')

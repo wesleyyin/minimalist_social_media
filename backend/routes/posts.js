@@ -9,18 +9,24 @@ router.route('/').get((req,res) =>{
         .catch(err => res.status(400).json('Error: ' + err));
 
 });
+router.route('/byuser').get((req,res) =>{
+    const user = req.user;
+    Post.find({user:user})
+        .then(posts => res.json(posts))
+        .catch(err => res.status(400).json('Error: ' + err));
 
+});
 //TODO add function that pushes the post ID to the user arrays
 //require connections and users for operation^
 router.route('/add').post((req,res) =>{
     const user = req.body.user;
     const caption = req.body.caption;
-    const hasPhoto = Boolean(req.body.hasPhoto);
+    const photoName = req.body.photoName;
 
     const newPost = new Post({
         user: user,
         caption: caption,
-        hasPhoto: hasPhoto
+        photoName: photoName
 
     });
     newPost.save()
@@ -93,7 +99,6 @@ router.route('/update/:id').post((req,res) =>{
         .then(post => {
             post.user = req.body.user;
             post.caption = req.body.caption;
-            post.hasPhoto = Boolean(req.body.hasPhoto);
             post.save()
                 .then(() => res.json('Post updated!'))
                 .catch(err => res.status(400).json('Error: ' + err));

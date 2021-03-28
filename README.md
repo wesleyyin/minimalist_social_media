@@ -33,3 +33,8 @@ https://medium.com/@mahesh_joshi/reactjs-nodejs-upload-image-how-to-upload-image
 
 references to other objects: good for post and notification arrays in User
 https://stackoverflow.com/questions/22244421/how-to-create-mongoose-schema-with-array-of-object-ids
+
+use websocket for notifications updates
+
+actual image stuff:
+https://dev.to/yosraskhiri/how-to-upload-an-image-using-mern-stack-1j95
