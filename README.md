@@ -38,3 +38,5 @@ use websocket for notifications updates
 
 actual image stuff:
 https://dev.to/yosraskhiri/how-to-upload-an-image-using-mern-stack-1j95
+
+React User Sessions: https://stackoverflow.com/questions/42420531/what-is-the-best-way-to-manage-a-users-session-in-react 

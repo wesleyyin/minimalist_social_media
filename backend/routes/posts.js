@@ -22,7 +22,7 @@ router.route('/add').post((req,res) =>{
     const user = req.body.user;
     const caption = req.body.caption;
     const photoName = req.body.photoName;
-
+    console.log(user);
     const newPost = new Post({
         user: user,
         caption: caption,
@@ -35,12 +35,13 @@ router.route('/add').post((req,res) =>{
                 if(err){
                     res.status(400).json('Error: ' + err);
                 }res.json("post added!");
-            });
+            })
+            
             
         }
         )
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+        .catch(err => res.json('Error: ' + err));
+}); 
 //TODO: implement callbacks for this
 function helper(post,cb){
 

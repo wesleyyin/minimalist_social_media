@@ -19,27 +19,31 @@ router.route('/:id').get((req,res) =>{
 });
 
 router.route('/login').post((req,res) =>{
-    User.findOne({name : req.body.username}, function (err, exists){
-        if (!exists.length){
-            res.json({status: false, msg: 'Incorrect Username or Password'});
+    User.find({username : req.body.username},function(err, use){
+        if(err){
+            res.json(err);
+        }
+        if (use.length==0){
+            res.json({status: false, msg: use});
         }else{
-            if(!Bcrypt.compareSync(request.body.password, exists.password)) {
+            if(!bcrypt.compareSync(String(req.body.password), use[0].password)) {
                 res.json({status: false, msg: 'Incorrect Username or Password'});
             }else{
                 res.json({status: true, msg: 'You have logged in!'});
-            }
+            } 
 
         }
-    });
+    })
+    
 
 });
 //updating bio
 router.route('/updatebio').post((req,res) =>{
-    User.findOne({name : req.body.username}, function (err, exists){
+    User.find({name : req.body.username}, function (err, exists){
         if (!exists.length){
             res.json({msg: 'User DNE'});
         }else{
-            exists.bio = req.body.bio;
+            exists[0].bio = req.body.bio;
             exists.save()
                 .then(() => res.json('Bio updated!'))
                 .catch(err => res.status(400).json('Error: ' + err));
@@ -52,8 +56,8 @@ router.route('/updatebio').post((req,res) =>{
 //check if username exists before doing anything
 router.route('/register').post((req,res) =>{
     console.log("in register");
-    User.find({name : req.body.username}, function (err, exists){
-        if (exists.length){
+    User.find({username : req.body.username}, function (err, exists){
+        if (exists.length>0){
             res.json('Username already exists')
         }else{
             const username = req.body.username;
