@@ -22,7 +22,7 @@ router.route('/add').post((req,res) =>{
     const user = req.body.user;
     const caption = req.body.caption;
     const photoName = req.body.photoName;
-    console.log(user);
+    console.log(caption);
     const newPost = new Post({
         user: user,
         caption: caption,
@@ -33,7 +33,7 @@ router.route('/add').post((req,res) =>{
         .then(function(post){
             helper(post,function(err,ret){
                 if(err){
-                    res.status(400).json('Error: ' + err);
+                    res.json('Error: ' + err);
                 }res.json("post added!");
             })
             

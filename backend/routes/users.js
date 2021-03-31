@@ -17,7 +17,20 @@ router.route('/:id').get((req,res) =>{
         .then(post => res.json(post))
         .catch(err => res.status(400).json('Error: ' + err));
 });
+router.route('/findname').post((req,res) =>{
+    User.find({username : req.body.username},function(err, use){
+        if(err){
+            res.json(err);
+        }
+        if (use.length==0){
+            res.json({status: false, msg: use});
+        }else{
+            res.json({status: true, id: use[0]._id});
+        }
+    })
+    
 
+});
 router.route('/login').post((req,res) =>{
     User.find({username : req.body.username},function(err, use){
         if(err){
@@ -34,8 +47,6 @@ router.route('/login').post((req,res) =>{
 
         }
     })
-    
-
 });
 //updating bio
 router.route('/updatebio').post((req,res) =>{
@@ -58,7 +69,7 @@ router.route('/register').post((req,res) =>{
     console.log("in register");
     User.find({username : req.body.username}, function (err, exists){
         if (exists.length>0){
-            res.json('Username already exists')
+            res.json({status: false, msg: 'User already exists, pick a new name.'});
         }else{
             const username = req.body.username;
             const password = bcrypt.hashSync(req.body.password, 10);
@@ -74,8 +85,8 @@ router.route('/register').post((req,res) =>{
             });
 
             newUser.save()
-                .then(users => res.json('User added!'))
-                .catch(err => res.status(400).json('Error: ' + err));
+                .then(users => res.json({status: true, msg: 'You have logged in!'}))
+                .catch(err => res.status(400).json({status:false, msg:'Error: ' + err}));
             }
     }).catch(err => res.status(400).json('Error: ' + err));
 });

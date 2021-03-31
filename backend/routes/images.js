@@ -2,11 +2,12 @@ const router = require('express').Router();
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
+let path = require('path');
 const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-      cb(null, '../images_uploads');
+      cb(null, './images_uploads');
   },
   filename: function(req, file, cb) {   
       cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
@@ -21,14 +22,12 @@ const fileFilter = (req, file, cb) => {
       req.isAdded = false;
       cb(null, false);
   }
-}
+} 
 let upload = multer({ storage, fileFilter });
 
 router.route('/add').post(upload.single('photo'), (req, res) => {
-    const name = req.body.name;
-    const birthdate = req.body.birthdate;
     const fileName = req.file.filename;
-    if(isAdded){
+    if(req.isAdded){
       res.json({uploaded:true, fileName: fileName});
     }else{
       res.json({uploaded:false});

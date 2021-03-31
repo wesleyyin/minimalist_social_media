@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import UserProfile from './UserProfile';
-
+import {Link} from 'react-router-dom';
 export default class Login extends Component{
     constructor(props){
         super(props)
@@ -46,7 +46,9 @@ export default class Login extends Component{
                 alert(res.data.status);
                 if(res.data.status){
                     UserProfile.setName(username);
+                    localStorage.setItem('username', username);
                     alert("works");
+                    window.location.href = "/new_post"
                     //TODO: redirect to posts page here
                 }else{
                     alert(res.data.msg);
@@ -84,6 +86,7 @@ export default class Login extends Component{
                     <div className = "form-group">
                         <input type = "submit" value = "Login" className = "btn btn-primary"/>
                     </div>
+                    <p>Don't have an account? <Link to = "/signup" >Sign up</Link></p>
 
                 </form>
             </div>
