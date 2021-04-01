@@ -9,7 +9,8 @@ const userSchema = new Schema({
     password: {type: String, required: true},
     posts: [{type: ObjectID, ref: 'Post'}],//post ID array
     notifications: [{type: ObjectID, ref: 'Notification'}],//notification ID array
-    bio: {type: String, required: false}
+    bio: {type: String, required: false},
+    profilePic : {type: String, required: false}
 },{
     timestamps: true,
 });

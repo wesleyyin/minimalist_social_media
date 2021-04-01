@@ -22,7 +22,7 @@ export default class NavBar extends Component{
                     <Link to = "/notifications" className = "nav-link">Notifications</Link>
                     </li>
                     <li className = "navbar-item">
-                    <Link to = {"/profiles/" + UserProfile.getName()}  className = "nav-link">Your Profile</Link>
+                    <Link to = {"/profiles/" + localStorage.getItem("username")}  className = "nav-link">Your Profile</Link>
                     </li>
                 </ul>
                 </div>
