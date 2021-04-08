@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import UserProfile from './UserProfile';
 import { Redirect } from 'react-router-dom'
-
+import SubProfile from './subprofile.component';
 export default class UserSearch extends Component{
     
     constructor(props){
         super(props)
         this.onChangeSearch = this.onChangeSearch.bind(this);
       
-   
+        this.displayResults = this.displayResults.bind(this);
         this.onSubmit= this.onSubmit.bind(this);
 
         
         this.state = {
-            searchedUser : ''
+            searchedUser : '',
+            displayedUser:{}
         };
 
     }
@@ -37,12 +38,13 @@ export default class UserSearch extends Component{
             .then(function(res){
                 alert(res.data.status);
                 if(res.data.status){
-                    id = res.data.id
+                    id = res.data.user._id
                     this.setState({
                         userID:id
                     });
                 }else{
                     alert(res.data.msg);
+                    alert("you are not logged in");
                 }
             }.bind(this))
             .catch(err => console.log('Error: ' + err));
@@ -56,36 +58,35 @@ export default class UserSearch extends Component{
 
     onSubmit(e){
         e.preventDefault();
-        
-        const formData = new FormData();
-        formData.append('photo', this.state.photo);
-        
-        axios.post('http://localhost:5000/images/add/', formData)
+        const username = this.state.searchedUser;
+        const user = {
+            username  : username,
+        }
+        console.log(user);
+        //TODO: maybe display pfp in results
+        axios.post('http://localhost:5000/users/findName', user)
             .then(res => {
-                if(res.data.uploaded){
-                    console.log("image uploaded");
-                    const fileName = res.data.fileName;
-                    const caption = this.state.caption;
-                    const user = this.state.userID;
-                    console.log(user);
-                    const post = {
-                        user: user,
-                        caption: caption,
-                        photoName: fileName
-                    }
-                    axios.post("http://localhost:5000/posts/add", post)
-                        .then(function(res){
-                            alert(res.data);
-                        })
-                        .catch(err => console.log('Error: ' + err));
-                 }else{
-                     alert("photo upload failed");
-                 }
+                const status = res.data.status;
+                if(status){
+                    alert(res.data.user._id);
+                    this.setState({
+                        displayedUser:{
+                            id: res.data.user._id,
+                            username: username
+                        }
+                    });
+                }else{
+                    alert(res.data.msg);
+                }
                 
              });
              
     }
-    
+    displayResults() {
+        if(this.state.displayedUser){
+            return <SubProfile username = {this.state.displayedUser.username} userID = {this.state.displayedUser.id}/>;
+        }
+    }
     render(){
         return (
             <div>
@@ -100,15 +101,13 @@ export default class UserSearch extends Component{
                         onChange = {this.onChangeSearch}
                         />    
                 </div>
-                
-                    
-                    
-                    <div className = "form-group">
-                        <input type = "submit" value = "Search!" className = "btn btn-primary"/>
-                    </div>
-                    
-
+                <div className = "form-group">
+                    <input type = "submit" value = "Search!" className = "btn btn-primary"/>
+                </div>
                 </form>
+                <div className="search-results">
+                    <this.displayResults/>
+                </div>
             </div>
         );
     }

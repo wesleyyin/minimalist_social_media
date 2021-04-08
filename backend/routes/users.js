@@ -14,7 +14,7 @@ router.route('/:id').get((req,res) =>{
     User.findById(req.params.id)
         .populate('posts')
         .populate('notifications')
-        .then(post => res.json(post))
+        .then(user => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 router.route('/findname').post((req,res) =>{
@@ -23,9 +23,9 @@ router.route('/findname').post((req,res) =>{
             res.json(err);
         }
         if (use.length==0){
-            res.json({status: false, msg: use});
+            res.json({status: false, msg: "User not found"});
         }else{
-            res.json({status: true, id: use[0]._id});
+            res.json({status: true, user: use[0]});
         }
     })
     

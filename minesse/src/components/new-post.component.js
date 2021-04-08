@@ -35,13 +35,13 @@ export default class NewPost extends Component{
             username  : username,
         }
         console.log(userData);
-        let id = "";
+        
         
         axios.post("http://localhost:5000/users/findname", userData)
             .then(function(res){
                 alert(res.data.status);
                 if(res.data.status){
-                    id = res.data.id
+                    const id = res.data.user._id
                     this.setState({
                         userID:id
                     });

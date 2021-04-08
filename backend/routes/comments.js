@@ -34,16 +34,12 @@ router.route('/add').post((req,res) =>{
         post: post
 
     });
-    newConnection.save()
-        .then(() => res.json('Connection added!'))
+    newComment.save()
+        .then(() => res.json('Comment added!'))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/:id').get((req,res) =>{
-    Connection.findById(req.params.id)
-        .then(connection => res.json(connection))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+
 
 //TODO remember to delete photo from FS at the same time
 router.route('/:id').delete((req,res) =>{

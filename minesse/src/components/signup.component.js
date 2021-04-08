@@ -57,6 +57,7 @@ export default class Signup extends Component{
                     UserProfile.setName(username);
                     alert("works");
                     //TODO: redirect to posts page here
+                    window.location.href = "/search"
                 }else{
                     alert(res.data.msg);
                 }

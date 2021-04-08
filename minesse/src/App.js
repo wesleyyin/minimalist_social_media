@@ -10,6 +10,7 @@ import UserProfile from "./components/user-profile.component";
 import UserSearch from "./components/user-search.component.js";
 import NewPost from "./components/new-post.component.js";
 import Notifications from "./components/notifications.component";
+import EditProfile from "./components/edit-profile.component";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path = "/" exact component = {Feed} />
           <Route path = "/profiles/:username" exact component = {UserProfile} />
           <Route path = "/search" exact component = {UserSearch} />
+          <Route path = "/edit-profile" exact component = {EditProfile} />
           <Route path = "/new_post" exact component = {NewPost} />
           <Route path = "/notifications" exact component = {Notifications} />
       </div>

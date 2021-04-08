@@ -2,6 +2,7 @@ const router = require('express').Router();
 let Post = require('../models/post.model');
 let User = require('../models/user.model');
 let Connection = require('../models/connection.model');
+let ObjectID = require('mongodb').ObjectID;
 const mongoose = require('mongoose');
 router.route('/').get((req,res) =>{
     Post.find()
@@ -9,12 +10,11 @@ router.route('/').get((req,res) =>{
         .catch(err => res.status(400).json('Error: ' + err));
 
 });
-router.route('/byuser').get((req,res) =>{
-    const user = req.user;
-    Post.find({user:user})
+router.route('/byuser').post((req,res) =>{
+    const user = req.body.user;
+    Post.find({user:ObjectID(user)})
         .then(posts => res.json(posts))
         .catch(err => res.status(400).json('Error: ' + err));
-
 });
 //TODO add function that pushes the post ID to the user arrays
 //require connections and users for operation^

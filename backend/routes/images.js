@@ -7,7 +7,7 @@ const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-      cb(null, './images_uploads');
+      cb(null, '../minesse/public/images_uploads/');
   },
   filename: function(req, file, cb) {   
       cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
@@ -36,7 +36,7 @@ router.route('/add').post(upload.single('photo'), (req, res) => {
 });
 router.route('/delete').post((req, res) => {
   const fileName = req.body.fileName;
-  const filePath = '../image_uploads/'+fileName; 
+  const filePath = '../minesse/public/images_uploads/'+fileName; 
   fs.unlinkSync(filePath);
   res.json("Image Removed");
   
