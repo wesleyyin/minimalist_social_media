@@ -46,6 +46,7 @@ export default class Login extends Component{
                 alert(res.data.status);
                 if(res.data.status){
                     localStorage.setItem('username', username);
+                    localStorage.setItem('userID', res.data.id);
                     alert("works");
                     window.location.href = "/search"
                     //TODO: redirect to posts page here

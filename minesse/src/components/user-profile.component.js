@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-
+import ProfPosts from './post-display-prof.component';
 export default class UserProfile extends Component{
     constructor(props){
         super(props)
@@ -15,7 +15,12 @@ export default class UserProfile extends Component{
         this.reqConnect = this.reqConnect.bind(this);
         this.connect = this.connect.bind(this);
         this.disconnect = this.disconnect.bind(this);
-        this.updateImage= this.updateImage.bind(this);
+
+        
+
+        this.editProfile = this.editProfile.bind(this);
+
+        
 
         this.state = {
             userID : '',
@@ -23,7 +28,8 @@ export default class UserProfile extends Component{
             posts :[],
             connectionStatus : 'none',
             currPost : 0,
-            connectionID : ''
+            connectionID : '',
+            
             
         };
 
@@ -61,19 +67,7 @@ export default class UserProfile extends Component{
                                 this.setState({
                                     viewedUser: ret.data.user
                                 });this.updateConnection();
-                               const byUser = this.state.viewedUser._id;
-                               const byuserData = {
-                                   user: byUser
-                               }
-                                axios.post("http://localhost:5000/posts/byuser", byuserData)
-                                    .then(function(res){
-                                        this.setState({
-                                            posts: res.data
-                                        });
-                                        console.log(this.state.posts);
-                                        this.updateImage();
-                                    }.bind(this)) 
-                                    .catch(err => console.log('Error: ' + err));
+                               
 
                             }else{
                                 alert('user not found');
@@ -88,6 +82,8 @@ export default class UserProfile extends Component{
             }.bind(this))
             .catch(err => console.log('Error: ' + err));
     }
+    
+    
     updateConnection(){
         const userA = String(this.state.userID);
         const userB = String(this.state.viewedUser._id);
@@ -115,16 +111,7 @@ export default class UserProfile extends Component{
             .catch(err => console.log('Error: ' + err));
     }
     
-    updateImage(){
-        const imgName = 'test.jpg';
-        const imgPath = `../images_uploads/${imgName}`;
-        import(`../images_uploads/test.jpeg`)
-            .then(image => {
-                this.setState({
-                  image: image
-                });
-              })
-    }
+    
     renderHead(){
         const nameDisplay = this.props.match.params.username;
         const bio = this.state.viewedUser.bio;
@@ -135,14 +122,18 @@ export default class UserProfile extends Component{
             <p id = "bio">{bio}</p>
         </div>);
     }
-     
+    editProfile(){
+
+        window.location.href = "/edit-profile";
+
+    }
     renderConnectStatus(){
         const status = this.state.connectionStatus;
         if(status=='connected'){
             return (<button onClick = {this.disconnect}>Disconnect</button>);
         }else if(status =='self'){
             //display edit head button
-            return (<button onClick = {()=>{window.href = "/edit-profile"}}>Edit</button>);
+            return (<button onClick = {this.editProfile}>Edit</button>);
         }else if(status =='requested'){
             return(<p>Requested</p>)
         }else if(status =='pending'){
@@ -193,21 +184,13 @@ export default class UserProfile extends Component{
     }
     renderContent(){
         const status = this.state.connectionStatus;
-        
-       
-        if(status=='connected'){
+
+        if(status=='connected' || status =='self'){
             //display posts in feed format
-            const post = this.state.posts[this.state.currPost];
-            return (<img src = {'..../backend/images_uploads/' + '56dc0856-e40b-4a84-99ac-29f2d7fa580b-1617840702580.jpeg'}/>);
+            return(<ProfPosts status = {status} user = {this.state.userID} viewedUser = {this.state.viewedUser}/>)
             
-        }else if(status =='self'){
-            //display posts in feed format with edit/delete permissions
-            const post = this.state.posts[this.state.currPost];
-            const imageName = "test.jpeg"
-            return (
-                <img src={process.env.PUBLIC_URL + '/images_uploads/' + imageName} />
-                );
-        }else{
+        }
+        else{
             //do not display posts
             return(<p>Connect with {this.props.match.params.username} to view their posts</p>);
         }

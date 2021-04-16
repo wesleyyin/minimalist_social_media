@@ -18,7 +18,7 @@ export default class NavBar extends Component{
                     <Link to = "/new_post" className = "nav-link">New Post</Link>
                     </li>
                     <li className = "navbar-item">
-                    <Link to = "/notifications" className = "nav-link">Notifications</Link>
+                    <Link to = "/notifications" className = "nav-link">Connect Requests</Link>
                     </li>
                     <li className = "navbar-item">
                     <Link to = {"/profiles/" + localStorage.getItem("username")}  className = "nav-link">Your Profile</Link>

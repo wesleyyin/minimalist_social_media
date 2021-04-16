@@ -57,6 +57,14 @@ router.route('/byusers').post((req,res) =>{
         .catch(err => res.json('Error: ' + err));
 });
 
+router.route('/userreqs').post((req,res) =>{
+    const userB = String(req.body.userB);
+
+    Connection.find({userB : userB, status: 'pending'})
+        .then(connections => res.json(connections))
+        .catch(err => res.json('Error: ' + err));
+});
+
 router.route('/:id').get((req,res) =>{
     Connection.findById(req.params.id)
         .then(connection => res.json(connection))

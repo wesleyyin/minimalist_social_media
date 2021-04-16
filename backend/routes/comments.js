@@ -2,8 +2,15 @@ const router = require('express').Router();
 let Comment = require('../models/comment.model');
 
 
-router.route('/bypost').get((req,res) =>{
+router.route('/bypost').post((req,res) =>{
     Comment.find({post:req.body.id}).sort({"created_at": 1}) //send post id in request
+        .then(comments => res.json(comments))
+        .catch(err => res.status(400).json('Error: ' + err));
+
+});
+
+router.route('/byparent').post((req,res) =>{
+    Comment.find({parent:req.body.id}).sort({"created_at": 1}) //send post id in request
         .then(comments => res.json(comments))
         .catch(err => res.status(400).json('Error: ' + err));
 
@@ -39,7 +46,22 @@ router.route('/add').post((req,res) =>{
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/reply/:id').post((req,res) =>{
+    const content = req.body.content;
+    const user = req.body.user;
+    const parent = req.body.id;
+    
 
+    const newComment = new Comment({
+        content: content,
+        user: user,
+        parent: parent
+
+    });
+    newComment.save()
+        .then(() => res.json('Comment added!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 
 //TODO remember to delete photo from FS at the same time
 router.route('/:id').delete((req,res) =>{
