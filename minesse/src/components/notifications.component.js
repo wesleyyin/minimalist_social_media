@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-
+import ReqStub from './req-stub.component'
 import axios from 'axios'
 //pass in viewed user, connection status, and id of user who is viewing
 class Notifications extends Component {
@@ -37,7 +37,11 @@ class Notifications extends Component {
     return (
       <div>
         <h3>Your Connect Requests</h3>
-        
+        <div>
+            {currReqs.map((req) =>
+                <ReqStub req = {req} key={req._id}/>
+             )}
+        </div>
       </div>
     );
   }
