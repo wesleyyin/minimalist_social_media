@@ -15,7 +15,10 @@ export default class UserSearch extends Component{
         
         this.state = {
             searchedUser : '',
-            displayedUser:{}
+            displayedUser:{
+                username: '',
+                id: ''
+            }
         };
 
     }
@@ -68,7 +71,7 @@ export default class UserSearch extends Component{
             .then(res => {
                 const status = res.data.status;
                 if(status){
-                    alert(res.data.user._id);
+                    
                     this.setState({
                         displayedUser:{
                             id: res.data.user._id,
@@ -83,9 +86,11 @@ export default class UserSearch extends Component{
              
     }
     displayResults() {
-        if(this.state.displayedUser){
-            return <SubProfile username = {this.state.displayedUser.username} userID = {this.state.displayedUser.id}/>;
-        }
+        console.log(this.state.displayedUser)
+        if(this.state.displayedUser.username != ''){
+            
+            return (<SubProfile userID = {this.state.displayedUser.id}/>);
+        }return (<div></div>);
     }
     render(){
         return (

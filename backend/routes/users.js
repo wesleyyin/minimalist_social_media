@@ -65,14 +65,29 @@ router.route('/login').post((req,res) =>{
 });
 //updating bio
 router.route('/updatebio').post((req,res) =>{
-    User.find({name : req.body.username}, function (err, exists){
+    User.find({username : req.body.username}, function (err, exists){
         if (!exists.length){
             res.json({msg: 'User DNE'});
         }else{
             exists[0].bio = req.body.bio;
-            exists.save()
-                .then(() => res.json('Bio updated!'))
-                .catch(err => res.status(400).json('Error: ' + err));
+            exists[0].save()
+                .then(() => res.json('Profile Updated!'))
+                .catch(err => res.json('Error: ' + err));
+        }
+    });
+});
+
+
+router.route('/update').post((req,res) =>{
+    User.find({username : req.body.username}, function (err, exists){
+        if (!exists.length){
+            res.json({msg: 'User DNE'});
+        }else{
+            exists[0].bio = req.body.bio;
+            exists[0].profilePic = req.body.photoName;
+            exists[0].save()
+                .then(() => res.json('Profile Updated!'))
+                .catch(err => res.json('Error: ' + err));
         }
     });
 });

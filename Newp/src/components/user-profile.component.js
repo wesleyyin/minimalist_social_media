@@ -20,7 +20,7 @@ export default class UserProfile extends Component{
 
         this.editProfile = this.editProfile.bind(this);
 
-        
+        this.renderPfp = this.renderPfp.bind(this);
 
         this.state = {
             userID : '',
@@ -115,12 +115,20 @@ export default class UserProfile extends Component{
     renderHead(){
         const nameDisplay = this.props.match.params.username;
         const bio = this.state.viewedUser.bio;
-        const pfp = this.state.viewedUser.profilePic;
+        
         return (<div>
-            <img src={pfp} alt ="Profile Pic" id = "pfp"/>
+            <this.renderPfp/>
             <h1 id = "profName">{nameDisplay}</h1>
             <p id = "bio">{bio}</p>
         </div>);
+    }
+    renderPfp(){
+        const pfp = this.state.viewedUser.profilePic;
+        if(pfp!= ""){
+            return(<div className = "imgDiv" style= {{height: '100px', width: '100px', overflow: 'hidden', borderRadius: '50px'}}>
+            <img style={{height: '100%'}} src={process.env.PUBLIC_URL + '/images_uploads/' + pfp } />
+          </div>);
+        }return(<div></div>);
     }
     editProfile(){
 

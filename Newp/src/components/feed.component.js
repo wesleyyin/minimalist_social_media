@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-
+import SubProfile from './subprofile.component';
 import axios from 'axios'
 //pass in viewed user, connection status, and id of user who is viewing
 class Feed extends Component {
@@ -81,6 +81,7 @@ updatePosts(){
         <div className = "imgDiv" style= {{height: '500px'}}>
           <img style={{height: '100%'}} src={process.env.PUBLIC_URL + '/images_uploads/' + imageName } />
         </div>
+        <SubProfile userID = {post.user}/>
         <p>{caption}</p>
         <this.renderNext/>
       </div>
